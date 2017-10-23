@@ -1,13 +1,13 @@
-import {Injectable, OnInit} from '@angular/core';
-// import {CookieService} from 'ngx-cookie';
+import {Injectable} from '@angular/core';
+import {CookieService} from 'ngx-cookie';
 
 @Injectable()
-export class AuthService implements OnInit {
+export class AuthService {
 
-  // constructor(private cookieService: CookieService) {}
+  constructor(private cookieService: CookieService) {}
 
   checkToken(key: string) {
-    // return this.cookieService.get(key);
+    return this.cookieService.get(key);
   }
 
   getCurrentUser() {}
