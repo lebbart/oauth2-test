@@ -6,8 +6,8 @@ import {Observable} from 'rxjs/Observable';
 export class testHttpService {
   constructor(private httpClient: HttpClient) { }
 
-  public get(url: string): Observable<any>{
-    return this.httpClient.get(url);
+  public get(url: string, options): Observable<any>{
+    return this.httpClient.get(url, options);
   }
 
 }

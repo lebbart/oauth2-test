@@ -2,18 +2,21 @@ import {Injectable} from '@angular/core';
 import {CookieService} from 'ngx-cookie';
 import {Http} from '@angular/http';
 import {testHttpService} from './http.service';
+import {HttpHeaders} from "@angular/common/http";
 
 @Injectable()
 export class AuthorizationService {
 
-  constructor(private cookieService: CookieService, private http: Http, private picService: testHttpService) {
+  constructor(private cookieService: CookieService, private http: Http, private httpServ: testHttpService) {
   }
 
   getCurrentUser(token) {
     console.log(token);
 
+    const headers = new HttpHeaders({ 'Authorization' : 'Bearer ' + token });
+    const options = { headers: headers };
 
-    this.picService.get('http://qa.millhouse.com:8443/current_user').subscribe(value => {
+    this.httpServ.get('http://qa.millhouse.com:8443/current_user', options).subscribe(value => {
         console.log(value);
       },
       error => {
