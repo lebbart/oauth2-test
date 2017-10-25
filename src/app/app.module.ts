@@ -14,9 +14,10 @@ import {HttpModule} from '@angular/http';
 import {OAuthModule} from 'angular-oauth2-oidc';
 import {LoginComponent} from './login/login.component';
 import {AuthorizationService} from './auth/auth.service';
-import {AuthenticationInterceptor} from "./auth/http.interceptor";
-import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
-import {testHttpService} from "./auth/http.service";
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
+import {AuthenticationInterceptor} from './auth/http.interceptor';
+import {testHttpService} from './auth/http.service';
+import {AuthGuard} from "./auth/auth.guard";
 
 @NgModule({
   declarations: [
@@ -36,11 +37,16 @@ import {testHttpService} from "./auth/http.service";
     OAuthModule.forRoot()
   ],
   providers: [
-    AuthorizationService, {
-    provide: HTTP_INTERCEPTORS,
-    useClass: AuthenticationInterceptor,
-    multi: true,
-  }, testHttpService],
+    AuthenticationInterceptor,
+    AuthorizationService,
+    testHttpService,
+    AuthGuard,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthenticationInterceptor,
+      multi: true,
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {

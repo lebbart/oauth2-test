@@ -1,40 +1,38 @@
 import {Injectable} from '@angular/core';
+import {Router} from '@angular/router';
 import {CookieService} from 'ngx-cookie';
-import {Http} from '@angular/http';
 import {testHttpService} from './http.service';
-import {HttpHeaders} from "@angular/common/http";
 
 @Injectable()
 export class AuthorizationService {
-
-  constructor(private cookieService: CookieService, private http: Http, private httpServ: testHttpService) {
+  constructor(private cookieService: CookieService,
+              private router: Router,
+              private httpService: testHttpService) {
   }
 
-  getCurrentUser(token) {
-    console.log(token);
-
-    const headers = new HttpHeaders({ 'Authorization' : 'Bearer ' + token });
-    const options = { headers: headers };
-
-    this.httpServ.get('http://qa.millhouse.com:8443/current_user', options).subscribe(value => {
-        console.log(value);
-      },
-      error => {
-        console.log(error);
+  getCurrentUser() {
+      return this.httpService.get('http://qa.millhouse.com:8443/current_user').map((data) => {
+        return data;
+      }, (error) => {
+        alert('Authorization error: ' + error);
       });
-
   }
 
-  getToken() {
-    let json = this.cookieService.get('token');
-    let tokenObj = json.split(';');
-    let getObj = JSON.parse(tokenObj[0]);
-
-    return getObj.access_token;
-  }
+  // getToken() {
+  //   if (this.cookieService.get('token')) {
+  //     let getCookies = this.cookieService.get('token');
+  //     let object = getCookies.split(';');
+  //     let cookieObj = JSON.parse(object[0]);
+  //
+  //     return cookieObj.access_token;
+  //   }
+  //
+  //    return undefined;
+  // }
 
   logout() {
-
+    this.cookieService.remove('token');
+    localStorage.removeItem('currentUser');
+    this.router.navigate(['/tracking']);
   }
-
 }

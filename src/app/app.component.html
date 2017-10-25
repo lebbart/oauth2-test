@@ -1,17 +1,36 @@
 <!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    Authentification test app!
-  </h1>
+<div *ngIf="currentUser !== undefined && currentUser !== null">
+
+  <div style="text-align:center">
+    <h1>
+      Authentification test app!
+    </h1>
+  </div>
+
+  <hr>
+
+  <ul *ngIf="currentUser !== undefined">
+    <li>Name: {{currentUser.firstName}}</li>
+    <li>Last name: {{currentUser.lastName}}</li>
+    <ul>
+      <li *ngFor="let permission of currentUser.permissions">{{permission}}</li>
+    </ul>
+  </ul>
+  <hr>
+
+  <ul>
+    <li><a [routerLink]="['/tracking']">Tracking</a></li>
+    <li><a [routerLink]="['/customers']">Customers</a></li>
+    <li><a [routerLink]="['/drivers']">Drivers</a></li>
+    <li><a [routerLink]="['/login']">Login</a></li>
+    <li><button (click)="onLogout()">Logout</button></li>
+  </ul>
+
+  <hr>
 </div>
-<hr>
-<ul>
-  <li><a [routerLink]="['/tracking']">Tracking</a></li>
-  <li><a [routerLink]="['/customers']">Customers</a></li>
-  <li><a [routerLink]="['/drivers']">Drivers</a></li>
-  <li><a [routerLink]="['/login']">Login</a></li>
-</ul>
-<hr>
+
+
+
 <div class="newRouter">
   <router-outlet></router-outlet>
 </div>

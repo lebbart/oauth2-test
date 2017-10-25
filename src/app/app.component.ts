@@ -1,7 +1,7 @@
 import { OAuthService } from 'angular-oauth2-oidc';
 import { JwksValidationHandler } from 'angular-oauth2-oidc';
 import { authConfig } from './auth.config';
-import { Component } from '@angular/core';
+import {AfterContentInit, Component, OnInit} from '@angular/core';
 import { AuthorizationService } from './auth/auth.service';
 import { CookieService } from 'ngx-cookie';
 
@@ -10,7 +10,8 @@ import { CookieService } from 'ngx-cookie';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements OnInit, AfterContentInit {
+  currentUser;
 
   constructor(private oauthService: OAuthService,
               private authService: AuthorizationService,
@@ -28,30 +29,49 @@ export class AppComponent {
     let cookieString = modern_token + ';domain=http://localhost:4200;path=/';
     this.cookieService.put('token', cookieString);
 
-    if (this.authService.getToken() !== undefined) {
-      this.authService.getCurrentUser(this.authService.getToken());
+
+    // this.configureWithNewConfigApi();
+
+    // this.oauthService.tryLogin({
+    //   onTokenReceived: (info) => {
+    //     console.log('state', info.state);
+    //   }
+    // });
+
+    // this.oauthService.initImplicitFlow();
+  }
+
+  ngOnInit() {
+    console.log('onInit');
+  }
+
+  ngAfterContentInit() {
+    console.log('ngAfterContentInit');
+
+    if (localStorage.getItem('currentUser')) {
+      console.log('Local storage get User');
+      this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    } else {
+      this.authService.getCurrentUser().subscribe(
+        (data: Response) => {
+          console.log('Get user from http request.');
+          localStorage.setItem('currentUser', JSON.stringify(data));
+          this.currentUser = data;
+        }
+      );
     }
-
-
-
-
-
-    this.configureWithNewConfigApi();
-
-    this.oauthService.tryLogin({
-      onTokenReceived: (info) => {
-        console.log('state', info.state);
-      }
-    });
-
-
   }
 
-  private configureWithNewConfigApi() {
-    this.oauthService.configure(authConfig);
-    this.oauthService.tokenValidationHandler = new JwksValidationHandler();
-    this.oauthService.loadDiscoveryDocumentAndTryLogin();
+  onLogout() {
+    this.authService.logout();
+    this.currentUser = null;
   }
+
+  // private configureWithNewConfigApi() {
+  //   this.oauthService.configure(authConfig);
+  //   this.oauthService.tokenValidationHandler = new JwksValidationHandler();
+  //   this.oauthService.loadDiscoveryDocumentAndTryLogin();
+  // }
 }
 
 
