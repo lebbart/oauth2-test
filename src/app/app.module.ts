@@ -17,7 +17,7 @@ import {AuthorizationService} from './auth/auth.service';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {AuthenticationInterceptor} from './auth/http.interceptor';
 import {testHttpService} from './auth/http.service';
-import {AuthGuard} from "./auth/auth.guard";
+import {AuthGuard} from './auth/auth.guard';
 
 @NgModule({
   declarations: [

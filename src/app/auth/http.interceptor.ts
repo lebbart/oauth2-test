@@ -2,7 +2,6 @@ import {Observable} from 'rxjs/Observable';
 import {Injectable, Injector} from '@angular/core';
 import {HttpEvent, HttpInterceptor, HttpHandler, HttpRequest} from '@angular/common/http';
 import {CookieService} from 'ngx-cookie';
-import {AuthorizationService} from "./auth.service";
 
 @Injectable()
 export class AuthenticationInterceptor implements HttpInterceptor {
@@ -11,17 +10,20 @@ export class AuthenticationInterceptor implements HttpInterceptor {
 
   constructor(private injector: Injector) {
     this.cookieService = this.injector.get(CookieService);
-
-    if (this.cookieService.get('token')) {
-      let getCookies = this.cookieService.get('token');
-      let object = getCookies.split(';');
-      let cookieObj = JSON.parse(object[0]);
-
-      this.token = cookieObj.access_token;
-    }
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler) {
+
+    if (localStorage.getItem('currentUser') === null) {
+      if (this.cookieService.get('token')) {
+        let getCookies = this.cookieService.get('token');
+        let object = getCookies.split(';');
+        let cookieObj = JSON.parse(object[0]);
+        console.log(getCookies);
+        this.token = cookieObj.access_token;
+      }
+    }
+
     const authReq = req.clone({headers: req.headers.set('Authorization', 'Bearer ' + this.token)});
     return next.handle(authReq);
   }

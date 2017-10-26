@@ -1,9 +1,5 @@
-import { OAuthService } from 'angular-oauth2-oidc';
-import { JwksValidationHandler } from 'angular-oauth2-oidc';
-import { authConfig } from './auth.config';
 import {AfterContentInit, Component, OnInit} from '@angular/core';
-import { AuthorizationService } from './auth/auth.service';
-import { CookieService } from 'ngx-cookie';
+import {AuthorizationService} from './auth/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -13,40 +9,19 @@ import { CookieService } from 'ngx-cookie';
 export class AppComponent implements OnInit, AfterContentInit {
   currentUser;
 
-  constructor(private oauthService: OAuthService,
-              private authService: AuthorizationService,
-              private cookieService: CookieService) {
+  constructor(private authService: AuthorizationService) {
 
-    let token = {
-      'access_token': 'f4523689-5b37-4863-9b63-c1aa51dd0ff3',
-      'token_type': 'bearer',
-      'refresh_token': '35845ca9-8a1a-4f09-8b06-48630fd1c95a',
-      'expires_in': 124456460,
-      'scope': 'ui'
-    };
-
-    let modern_token = JSON.stringify(token);
-    let cookieString = modern_token + ';domain=http://localhost:4200;path=/';
-    this.cookieService.put('token', cookieString);
-
-
-    // this.configureWithNewConfigApi();
-
-    // this.oauthService.tryLogin({
-    //   onTokenReceived: (info) => {
-    //     console.log('state', info.state);
-    //   }
-    // });
-
-    // this.oauthService.initImplicitFlow();
-  }
-
-  ngOnInit() {
-    console.log('onInit');
-  }
-
-  ngAfterContentInit() {
-    console.log('ngAfterContentInit');
+    // let token = {
+    //   'access_token': 'f4523689-5b37-4863-9b63-c1aa51dd0ff3',
+    //   'token_type': 'bearer',
+    //   'refresh_token': '35845ca9-8a1a-4f09-8b06-48630fd1c95a',
+    //   'expires_in': 124456460,
+    //   'scope': 'ui'
+    // };
+    //
+    // let modern_token = JSON.stringify(token);
+    // let cookieString = modern_token + ';domain=http://localhost:4200;path=/';
+    // this.cookieService.put('token', cookieString);
 
     if (localStorage.getItem('currentUser')) {
       console.log('Local storage get User');
@@ -62,16 +37,18 @@ export class AppComponent implements OnInit, AfterContentInit {
     }
   }
 
+  ngOnInit() {
+    console.log('onInit');
+  }
+
+  ngAfterContentInit() {
+    console.log('ngAfterContentInit');
+  }
+
   onLogout() {
     this.authService.logout();
     this.currentUser = null;
   }
-
-  // private configureWithNewConfigApi() {
-  //   this.oauthService.configure(authConfig);
-  //   this.oauthService.tokenValidationHandler = new JwksValidationHandler();
-  //   this.oauthService.loadDiscoveryDocumentAndTryLogin();
-  // }
 }
 
 

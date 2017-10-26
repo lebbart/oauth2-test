@@ -18,21 +18,26 @@ export class AuthorizationService {
       });
   }
 
-  // getToken() {
-  //   if (this.cookieService.get('token')) {
-  //     let getCookies = this.cookieService.get('token');
-  //     let object = getCookies.split(';');
-  //     let cookieObj = JSON.parse(object[0]);
-  //
-  //     return cookieObj.access_token;
-  //   }
-  //
-  //    return undefined;
-  // }
+  getToken() {
+    if (this.cookieService.get('token')) {
+      let getCookies = this.cookieService.get('token');
+      let object = getCookies.split(';');
+      let cookieObj = JSON.parse(object[0]);
+
+      return cookieObj.access_token;
+    }
+
+     return undefined;
+  }
+
+  loginRedirect() {
+    let redirect_url = window.location.href;
+    window.location.href = "http://localhost:9100/?redirect_url=" + redirect_url;
+  }
 
   logout() {
     this.cookieService.remove('token');
     localStorage.removeItem('currentUser');
-    this.router.navigate(['/tracking']);
+    this.loginRedirect();
   }
 }
