@@ -19,7 +19,6 @@ export class AuthenticationInterceptor implements HttpInterceptor {
         let getCookies = this.cookieService.get('token');
         let object = getCookies.split(';');
         let cookieObj = JSON.parse(object[0]);
-        console.log(getCookies);
         this.token = cookieObj.access_token;
       }
     }

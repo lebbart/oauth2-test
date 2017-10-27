@@ -1,13 +1,13 @@
 import {Injectable} from '@angular/core';
-import {Router} from '@angular/router';
 import {CookieService} from 'ngx-cookie';
-import {testHttpService} from './http.service';
+import {HttpService} from './http.service';
 
 @Injectable()
 export class AuthorizationService {
+  redirectLink: string = 'http://localhost:9100/?redirect_url=';
+
   constructor(private cookieService: CookieService,
-              private router: Router,
-              private httpService: testHttpService) {
+              private httpService: HttpService) {
   }
 
   getCurrentUser() {
@@ -19,6 +19,8 @@ export class AuthorizationService {
   }
 
   getToken() {
+    // TODO: this func should be taken from interceptor service!
+
     if (this.cookieService.get('token')) {
       let getCookies = this.cookieService.get('token');
       let object = getCookies.split(';');
@@ -31,8 +33,7 @@ export class AuthorizationService {
   }
 
   loginRedirect() {
-    let redirect_url = window.location.href;
-    window.location.href = "http://localhost:9100/?redirect_url=" + redirect_url;
+    window.location.href = this.redirectLink + window.location.href;
   }
 
   logout() {

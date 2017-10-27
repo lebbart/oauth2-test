@@ -1,5 +1,6 @@
 import {AfterContentInit, Component, OnInit} from '@angular/core';
 import {AuthorizationService} from './auth/auth.service';
+import {Toast, ToasterService} from "angular2-toaster";
 
 @Component({
   selector: 'app-root',
@@ -9,19 +10,9 @@ import {AuthorizationService} from './auth/auth.service';
 export class AppComponent implements OnInit, AfterContentInit {
   currentUser;
 
-  constructor(private authService: AuthorizationService) {
+  constructor(private authService: AuthorizationService,
+              private toasterService: ToasterService) {
 
-    // let token = {
-    //   'access_token': 'f4523689-5b37-4863-9b63-c1aa51dd0ff3',
-    //   'token_type': 'bearer',
-    //   'refresh_token': '35845ca9-8a1a-4f09-8b06-48630fd1c95a',
-    //   'expires_in': 124456460,
-    //   'scope': 'ui'
-    // };
-    //
-    // let modern_token = JSON.stringify(token);
-    // let cookieString = modern_token + ';domain=http://localhost:4200;path=/';
-    // this.cookieService.put('token', cookieString);
 
     if (localStorage.getItem('currentUser')) {
       console.log('Local storage get User');
@@ -41,8 +32,18 @@ export class AppComponent implements OnInit, AfterContentInit {
     console.log('onInit');
   }
 
+
   ngAfterContentInit() {
     console.log('ngAfterContentInit');
+  }
+
+  popToast() {
+    this.toasterService.pop({
+      type: 'success',
+      title: 'Show this Toast and see it!',
+      body: 'Bo bo toast',
+      showCloseButton: true
+    });
   }
 
   onLogout() {

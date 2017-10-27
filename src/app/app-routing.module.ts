@@ -7,7 +7,7 @@ const appRoutes: Routes = [
   {
     path: '',
     canActivate: [AuthGuard],
-    redirectTo: '/drivers',
+    redirectTo: '/tracking',
     pathMatch: 'full'
   },
   {

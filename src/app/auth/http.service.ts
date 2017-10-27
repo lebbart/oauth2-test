@@ -1,13 +1,12 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 
 @Injectable()
-export class testHttpService {
+export class HttpService {
   constructor(private httpClient: HttpClient) {}
 
   public get(url: string): Observable<any> {
     return this.httpClient.get(url);
   }
-
 }
