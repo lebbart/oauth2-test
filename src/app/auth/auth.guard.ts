@@ -7,37 +7,69 @@ import {ToasterService} from 'angular2-toaster';
 @Injectable()
 export class AuthGuard implements CanActivate {
   currentUser: User;
+  permissionsToCheck;
 
-  constructor(private auth: AuthorizationService, private toasterService: ToasterService) {
+  constructor(private auth: AuthorizationService,
+              private toasterService: ToasterService) {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
   }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+    this.permissionsToCheck = route.data['roles'];
+
     if (this.currentUser !== null) {
-      if (this.currentUser) {
-        console.log(this.currentUser.permissions);
+      console.log('Current user !== null');
+      if (this.permissionsToCheck) {
+        let resultDifference = this.currentUser.permissions.filter(e => this.permissionsToCheck.find(a => e === a));
+        if (this.currentUser.permissions.length > resultDifference.length) {
+          console.log('true');
+          return true;
+        }
+      } else {
         this.toasterService.pop({
-          type: 'success',
-          title: 'Success!',
-          body: 'You have permissions to get this route!'
+          type: 'error',
+          title: 'Error!',
+          body: 'You have no permissions to get this module!'
         });
-        // TODO: check if currentUser have permissions to check
+
+        return false;
       }
-
-      // get current state
-      // console.log(state.url);
-
-      return true;
     }
 
-    this.toasterService.pop({
-      type: 'error',
-      title: 'Error!',
-      body: 'You can\'t get this route because of Permission',
-      showCloseButton: true
-    });
+    if (this.currentUser === null) {
+      console.log('Current user === null');
+      this.auth.getCurrentUser().subscribe(
+        (data) => {
+          this.currentUser = data;
 
-    this.auth.loginRedirect();
+          if (this.permissionsToCheck) {
+            let resultDifference = this.currentUser.permissions.filter(e => this.permissionsToCheck.find(a => e == a));
+            if (this.currentUser.permissions.length > resultDifference.length) {
+              console.log('user === null', true);
+              return true;
+            }
+          } else {
+            console.log('permission check - if no - go away');
+            this.toasterService.pop({
+              type: 'error',
+              title: 'Error!',
+              body: 'You have no permissions to get this module!'
+            });
+
+            return false;
+          }
+        }
+      );
+    } else {
+      this.toasterService.pop({
+        type: 'error',
+        title: 'Error!',
+        body: 'Something went wrong, please contact with Administrator.'
+      });
+
+      this.auth.loginRedirect();
+    }
+
     return false;
   }
 }

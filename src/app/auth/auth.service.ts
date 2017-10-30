@@ -18,19 +18,19 @@ export class AuthorizationService {
       });
   }
 
-  getToken() {
-    // TODO: this func should be taken from interceptor service!
-
-    if (this.cookieService.get('token')) {
-      let getCookies = this.cookieService.get('token');
-      let object = getCookies.split(';');
-      let cookieObj = JSON.parse(object[0]);
-
-      return cookieObj.access_token;
-    }
-
-     return undefined;
-  }
+  // getToken() {
+  //   // TODO: this func should be taken from interceptor service!
+  //
+  //   if (this.cookieService.get('token')) {
+  //     let getCookies = this.cookieService.get('token');
+  //     let object = getCookies.split(';');
+  //     let cookieObj = JSON.parse(object[0]);
+  //
+  //     return cookieObj.access_token;
+  //   }
+  //
+  //    return undefined;
+  // }
 
   loginRedirect() {
     window.location.href = this.redirectLink + window.location.href;

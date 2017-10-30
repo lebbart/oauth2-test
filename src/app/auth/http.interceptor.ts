@@ -1,6 +1,5 @@
-import {Observable} from 'rxjs/Observable';
 import {Injectable, Injector} from '@angular/core';
-import {HttpEvent, HttpInterceptor, HttpHandler, HttpRequest} from '@angular/common/http';
+import {HttpInterceptor, HttpHandler, HttpRequest} from '@angular/common/http';
 import {CookieService} from 'ngx-cookie';
 
 @Injectable()
@@ -16,10 +15,15 @@ export class AuthenticationInterceptor implements HttpInterceptor {
 
     if (localStorage.getItem('currentUser') === null) {
       if (this.cookieService.get('token')) {
+
         let getCookies = this.cookieService.get('token');
         let object = getCookies.split(';');
         let cookieObj = JSON.parse(object[0]);
         this.token = cookieObj.access_token;
+
+      } else {
+
+        return;
       }
     }
 

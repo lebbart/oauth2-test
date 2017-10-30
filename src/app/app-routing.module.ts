@@ -8,7 +8,7 @@ const appRoutes: Routes = [
     path: '',
     canActivate: [AuthGuard],
     redirectTo: '/tracking',
-    pathMatch: 'full'
+    pathMatch: 'full',
   },
   {
     path: 'login',

@@ -1,6 +1,6 @@
 import {AfterContentInit, Component, OnInit} from '@angular/core';
 import {AuthorizationService} from './auth/auth.service';
-import {Toast, ToasterService} from "angular2-toaster";
+import {ToasterService} from 'angular2-toaster';
 
 @Component({
   selector: 'app-root',
@@ -20,7 +20,6 @@ export class AppComponent implements OnInit, AfterContentInit {
     } else {
       this.authService.getCurrentUser().subscribe(
         (data: Response) => {
-          console.log('Get user from http request.');
           localStorage.setItem('currentUser', JSON.stringify(data));
           this.currentUser = data;
         }

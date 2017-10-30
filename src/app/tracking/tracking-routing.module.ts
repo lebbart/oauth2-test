@@ -7,6 +7,13 @@ const trackingRoutes: Routes = [
   {
     path: 'tracking',
     canActivate: [AuthGuard],
+    data: {
+      msg: 'this is msg',
+      roles: [
+        'USE_TRACKING',
+        'IVIA_DRIVER'
+      ]
+    },
     component: TrackingViewComponent
   }
 ];

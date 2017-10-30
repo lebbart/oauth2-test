@@ -7,6 +7,11 @@ const customersRoutes: Routes = [
   {
     path: 'customers',
     canActivate: [AuthGuard],
+    data: {
+      'roles': [
+        'USE_CUSTOMER_MNGMT'
+      ]
+    },
     component: CustomersComponent
   }
 ];
